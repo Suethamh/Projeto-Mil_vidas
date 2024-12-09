@@ -28,7 +28,7 @@ public class ListaDesejoRepository {
     public List<ListaDesejo> buscaListaDesejosPorCliente(String clienteNome) {
         List<ListaDesejo> listaBusca = new ArrayList<>();
         for (ListaDesejo ld : this.listaDesejos) {
-            if (ld.getCliente().getLogin().equalsIgnoreCase(clienteNome)) {
+            if (ld.getCliente().getNome().equalsIgnoreCase(clienteNome)) {
                 listaBusca.add(ld);
             }
         }

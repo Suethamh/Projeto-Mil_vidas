@@ -8,7 +8,7 @@
     <div class="container">
         <h1 th:text="${cliente.login != null ? 'Editar Cliente' : 'Novo Cliente'}">Formulário de Cliente</h1>
 
-        <form th:action="@{${cliente.login != null ? '/cliente/editarCliente/' + cliente.login : '/cliente/novoCliente/'}}" th:object="${cliente}" method="post">
+        <form th:action="@{${cliente.login != null ? '/cliente/editarCliente/' + cliente.login : '/cliente/novoCliente'}}" th:object="${cliente}" method="post">
             <div>
                 <label for="login">Login:</label>
                 <input type="text" th:field="*{login}" id="login" placeholder="Digite o login" required th:reandoly="${cliente.login != null}">

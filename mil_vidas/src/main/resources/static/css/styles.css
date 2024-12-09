@@ -1,32 +1,33 @@
 body {
-    font-family: Arial;
-    background-color: #f4f7fa;
-    color: black;
+    font-family: Arial, sans-serif;
+    background-color: #DECDF5; /* Fundo lilás claro */
+    color: #452F75; /* Roxo escuro para contraste */
     display: flex;
     justify-content: center;
-    align-self: center;
+    align-items: center;
     min-height: 100vh;
     margin: 0;
 }
+
 
 .container {
     max-width: 900px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #681c9e; /* Roxo escuro */
+    background-color: #2cc0c5; /* Azul pastel */
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
     text-align: center;
-    color: #ffe4e1; /* Rosa claro */
+    color: #452F75; /* Roxo escuro */
 }
 
 /* Estilos para mensagens do servidor */
 .mensagem-servidor {
-    background-color: #dda0dd; /* Roxo pastel */
-    color: #4b0082;
+    background-color: #EC73C0; /* Rosa vibrante */
+    color: #452F75; /* Roxo escuro */
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 20px;
@@ -38,7 +39,7 @@ h1 {
     display: inline-block;
     padding: 10px 20px;
     margin: 5px;
-    background-color: #8a2be2; /* Roxo médio */
+    background-color: #dab3e8; /* Lilás pastel */
     color: #ffffff;
     text-decoration: none;
     border: none;
@@ -50,23 +51,23 @@ h1 {
 }
 
 .btn:hover {
-    background-color: #9370db; /* Roxo lavanda */
+    background-color: #c9a0e5; /* Lilás ligeiramente mais escuro */
 }
 
 .btn-edit {
-    background-color: #6495ed; /* Azul claro */
+    background-color: #a6d8f0; /* Azul pastel */
 }
 
 .btn-edit:hover {
-    background-color: #4169e1; /* Azul royal */
+    background-color: #87c5e6; /* Azul um pouco mais escuro */
 }
 
 .btn-delete {
-    background-color: #ff69b4; /* Rosa forte */
+    background-color: #f0a6c1; /* Rosa pastel */
 }
 
 .btn-delete:hover {
-    background-color: #ff1493; /* Rosa profundo */
+    background-color: #e08cb2; /* Rosa mais escuro */
 }
 
 /* Formulários */
@@ -79,9 +80,11 @@ h1 {
 .search-form input {
     padding: 10px;
     width: 70%;
-    border: 1px solid #8a2be2;
+    border: 1px solid #dab3e8; /* Lilás pastel */
     border-radius: 5px 0 0 5px;
     outline: none;
+    background-color: #fdf6ff; /* Branco com tom lilás */
+    color: #452F75;
 }
 
 .search-form button {
@@ -93,32 +96,33 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: #9370db; /* Roxo lavanda */
-    color: #ffffff;
+    background-color: #DECDF5; /* Fundo lilás claro */
+    color: #452F75; /* Roxo escuro */
 }
 
 th, td {
     padding: 15px;
     text-align: left;
-    border: 1px solid #4b0082; /* Roxo escuro */
+    border: 1px solid #6247AA; /* Roxo moderado */
 }
 
 th {
-    background-color: #8a2be2; /* Roxo médio */
+    background-color: #6247AA; /* Roxo moderado */
+    color: #ffffff;
 }
 
 td {
-    background-color: #6a5acd; /* Azul ardósia */
+    background-color: #2cc0c5; /* Azul pastel */
 }
 
 tbody tr:nth-child(odd) {
-    background-color: #836fff; /* Lilás mais forte */
+    background-color: #DECDF5; /* Lilás claro */
 }
 
 tbody tr:nth-child(even) {
-    background-color: #7b68ee; /* Roxo moderado */
+    background-color: #EC73C0; /* Rosa vibrante */
 }
 
 tbody tr:hover {
-    background-color: #dda0dd; /* Roxo pastel */
+    background-color: #2cc0c5; /* Azul pastel */
 }
