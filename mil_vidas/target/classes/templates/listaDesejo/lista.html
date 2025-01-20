@@ -36,7 +36,7 @@
                 <tr th:each="listaDesejo : ${listaDesejos}">
                     <td th:text="${listaDesejo.cod_wl}">código</td>
                     <td th:text="${listaDesejo.livro.titulo}">livro</td>
-                    <td th:text="${listaDesejo.cliente.nome}">cliente</td>
+                    <td th:text="${listaDesejo.cliente.login}">cliente</td>
                     <td th:text="${listaDesejo.data_inclusao}">data_inclusao</td>    
                     <td>
                         <a th:href="@{/listaDesejo/editarListaDesejo/{cod_wl}(cod_wl=${listaDesejo.cod_wl})}" class="btn btn-edit">Editar</a>

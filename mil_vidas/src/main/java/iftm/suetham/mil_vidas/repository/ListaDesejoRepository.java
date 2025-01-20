@@ -28,7 +28,7 @@ public class ListaDesejoRepository {
         String sql = """ 
                 select ld.cod_ld, c.cli_nome, l.liv_titulo, ld.dt_inclusao 
                 from tb_cliente c, tb_listaDesejo ld, tb_livro l
-                where ld.cli_login = c.cli_login and ld.cod_livro = l.cod_livro;
+                where c.cli_login = ld.cli_login and l.cod_livro = ld.cod_livro;
                 """;
         return conexaoBanco.query(sql, (rs, rowNum) -> setListaDesejo(rs));
     }
@@ -37,7 +37,7 @@ public class ListaDesejoRepository {
         String sql = """ 
                 select ld.cod_ld, c.cli_nome, l.liv_titulo, ld.dt_inclusao 
                 from tb_cliente c, tb_listaDesejo ld, tb_livro l
-                where ld.cli_login = c.cli_login and ld.cod_livro = l.cod_livro 
+                where c.cli_login = ld.cli_login and l.cod_livro = ld.cod_livro 
                 and lower(c.cli_nome) like ?;
                 """;
         return conexaoBanco.query(sql, (rs, rowNum) -> setListaDesejo(rs), "%"+clienteNome+"%");
@@ -47,7 +47,7 @@ public class ListaDesejoRepository {
         String sql = """
                 select ld.cod_ld, c.cli_nome, l.liv_titulo, ld.dt_inclusao 
                 from tb_cliente c, tb_listaDesejo ld, tb_livro l
-                where ld.cli_login = c.cli_login and ld.cod_livro = l.cod_livro 
+                where c.cli_login = ld.cli_login and l.cod_livro = ld.cod_livro 
                 and ld.cod_ld = ?;
                 """;
         return conexaoBanco.queryForObject(sql, (rs, rowNum) -> setListaDesejo(rs), cod_wl);
@@ -55,7 +55,7 @@ public class ListaDesejoRepository {
 
     public ListaDesejo setListaDesejo(ResultSet rs) throws SQLException{
         Cliente cliente = new Cliente();
-        cliente.setLogin(rs.getString("cli_login"));
+        cliente.setLogin(rs.getString("cli_nome"));
         
         Livro livro = new Livro();
         livro.setTitulo(rs.getString("liv_titulo"));
@@ -90,12 +90,15 @@ public class ListaDesejoRepository {
     public boolean update(ListaDesejo listaDesejo) {
         String sql = """
                 update tb_listaDesejo
-                set cli_login = ?, cod_livro = ?, dt_inclusao = ?
+                set cli_login = (select cli_login from tb_cliente where lower(cli_nome) like ?), 
+                cod_livro = (select cod_livro from tb_livro where lower(liv_titulo) like ?), 
+                dt_inclusao = ?
                 where cod_ld = ?
                 """;
         return conexaoBanco.update(sql,
-                                   listaDesejo.getCliente(),
-                                   listaDesejo.getLivro(),
-                                   listaDesejo.getData_inclusao()) > 0;
+                                   "%"+listaDesejo.getCliente().getNome().toLowerCase()+"%",
+                                   "%"+listaDesejo.getLivro().getTitulo().toLowerCase()+"%",
+                                   listaDesejo.getData_inclusao(),
+                                   listaDesejo.getCod_wl()) > 0;
     }
 }
