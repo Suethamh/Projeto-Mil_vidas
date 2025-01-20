@@ -3,6 +3,8 @@ package iftm.suetham.mil_vidas.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import iftm.suetham.mil_vidas.domain.Livro;
@@ -10,54 +12,73 @@ import iftm.suetham.mil_vidas.domain.Livro;
 @Component
 public class LivroRepository {
     
-    private List<Livro> livros;
+    private JdbcTemplate conexaoBanco;
     
-    public LivroRepository(){
-        this.livros = new ArrayList<>();
-        this.livros.add(new Livro(1, "O Corredor tem medo do perigo", "Carl Deuker", "RealIdade", "Suspense", 174, 4.0));
-        this.livros.add(new Livro(2, "Eleanor & Park", "rainbow rowell", "novo século", "romance", 287, 5.0));
+    public LivroRepository(JdbcTemplate conexaoBanco){
+        this.conexaoBanco = conexaoBanco;
     }
 
     public List<Livro> getLivros(){
-        return this.livros;
+        String sql = """
+                select cod_livro as cod_livro, liv_titulo as titulo, liv_escritor as escritor, liv_editora as editora, liv_genero as genero, liv_num_paginas as num_paginas, liv_avaliacao as avaliacao
+                from tb_livro
+                """;
+        return conexaoBanco.query(sql, new BeanPropertyRowMapper<>(Livro.class));
     }
 
 
     public List<Livro> buscaLivroPorTitulo(String titulo) {
-        List<Livro> livroBusca = new ArrayList<>();
-        for(Livro livro : this.livros){
-            if(livro.getTitulo().toLowerCase().contains(titulo.toLowerCase())){
-                livroBusca.add(livro);
-            }
-        }
-        return livroBusca;
+        String sql = """
+                select cod_livro as cod_livro, liv_titulo as titulo, liv_escritor as escritor, liv_editora as editora, liv_genero as genero, liv_num_paginas as num_paginas, liv_avaliacao as avaliacao
+                from tb_livro
+                where lower(liv_titulo) like ?
+                """;
+        return conexaoBanco.query(sql, new BeanPropertyRowMapper<>(Livro.class), "%"+titulo+"%");
     }
 
     public Livro buscaLivroPorCodigo(int codigo) {
-        Livro livroBusca = new Livro(codigo);
-        int index = livros.indexOf(livroBusca);
-        if(index != -1){
-            return livros.get(index);
-        }else{
-            return null;
-        }
+        String sql = """
+                select cod_livro as cod_livro, liv_titulo as titulo, liv_escritor as escritor, liv_editora as editora, liv_genero as genero, liv_num_paginas as num_paginas, liv_avaliacao as avaliacao
+                from tb_livro
+                where cod_livro = ?
+                """;
+        return conexaoBanco.queryForObject(sql, new BeanPropertyRowMapper<>(Livro.class), codigo);
     }
 
     public void novoLivro(Livro livro){
-        livros.add(livro);
+        String sql = """
+                insert into tb_livro (liv_titulo, liv_escritor, liv_editora, liv_genero, liv_num_paginas, liv_avaliacao) values (?,?,?,?,?,?)
+                """;
+        conexaoBanco.update(sql,
+                            livro.getTitulo(),
+                            livro.getEscritor(),
+                            livro.getEditora(),
+                            livro.getGenero(),
+                            livro.getNum_paginas(),
+                            livro.getAvaliacao());
     }
 
     public boolean delete(int codigo){
-        Livro livro = new Livro(codigo);
-        return livros.remove(livro);
+        String sql = """
+                delete from tb_livro
+                where cod_livro = ?
+                """;
+        return conexaoBanco.update(sql, codigo) > 0;
     }
 
     public boolean update(Livro livro){
-        int index = livros.indexOf(livro);
-        if(index != -1){
-            livros.set(index, livro);
-            return true;
-        }
-        return false;
+        String sql = """
+                update tb_livro
+                set liv_titulo = ?, liv_escritor= ?, liv_editora = ?, liv_genero= ?, liv_num_paginas = ?, liv_avaliacao = ?
+                where cod_livro = ?
+                """;
+        return conexaoBanco.update(sql,
+                            livro.getTitulo(),
+                            livro.getEscritor(),
+                            livro.getEditora(),
+                            livro.getGenero(),
+                            livro.getNum_paginas(),
+                            livro.getAvaliacao(),
+                            livro.getCod_livro()) > 0;
     }
 }

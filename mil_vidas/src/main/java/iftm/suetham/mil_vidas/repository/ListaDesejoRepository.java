@@ -1,8 +1,14 @@
 package iftm.suetham.mil_vidas.repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.tree.RowMapper;
+
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import iftm.suetham.mil_vidas.domain.Cliente;
@@ -12,55 +18,84 @@ import iftm.suetham.mil_vidas.domain.ListaDesejo;
 @Component
 public class ListaDesejoRepository {
 
-    private List<ListaDesejo> listaDesejos;
+    private JdbcTemplate conexaoBanco;
 
-    public ListaDesejoRepository() {
-        this.listaDesejos = new ArrayList<>();
-        // Dados iniciais para teste
-        this.listaDesejos.add(new ListaDesejo(1, new Livro(1, "O Corredor tem medo do perigo", "Carl Deuker", "RealIdade", "Suspense", 174, 4.0), new Cliente("user1", "senha1", "João", "joao123"), "2024-12-01"));
-        this.listaDesejos.add(new ListaDesejo(2, new Livro(2, "Eleanor & Park", "Rainbow Rowell", "Novo Século", "Romance", 287, 5.0), new Cliente("user2", "senha2", "Maria", "maria123"), "2024-12-02"));
+    public ListaDesejoRepository(JdbcTemplate conexaoBanco) {
+        this.conexaoBanco = conexaoBanco;    
     }
 
     public List<ListaDesejo> getListaDesejos() {
-        return this.listaDesejos;
+        String sql = """ 
+                select ld.cod_ld, c.cli_nome, l.liv_titulo, ld.dt_inclusao 
+                from tb_cliente c, tb_listaDesejo ld, tb_livro l
+                where ld.cli_login = c.cli_login and ld.cod_livro = l.cod_livro;
+                """;
+        return conexaoBanco.query(sql, (rs, rowNum) -> setListaDesejo(rs));
     }
 
     public List<ListaDesejo> buscaListaDesejosPorCliente(String clienteNome) {
-        List<ListaDesejo> listaBusca = new ArrayList<>();
-        for (ListaDesejo ld : this.listaDesejos) {
-            if (ld.getCliente().getNome().equalsIgnoreCase(clienteNome)) {
-                listaBusca.add(ld);
-            }
-        }
-        return listaBusca;
+        String sql = """ 
+                select ld.cod_ld, c.cli_nome, l.liv_titulo, ld.dt_inclusao 
+                from tb_cliente c, tb_listaDesejo ld, tb_livro l
+                where ld.cli_login = c.cli_login and ld.cod_livro = l.cod_livro 
+                and lower(c.cli_nome) like ?;
+                """;
+        return conexaoBanco.query(sql, (rs, rowNum) -> setListaDesejo(rs), "%"+clienteNome+"%");
     }
 
     public ListaDesejo buscaListaDesejoPorCodigo(int cod_wl) {
-        ListaDesejo listaBusca = new ListaDesejo();
-        listaBusca.setCod_wl(cod_wl);
-        int index = listaDesejos.indexOf(listaBusca);
-        if (index != -1) {
-            return listaDesejos.get(index);
-        }
-        return null;
+        String sql = """
+                select ld.cod_ld, c.cli_nome, l.liv_titulo, ld.dt_inclusao 
+                from tb_cliente c, tb_listaDesejo ld, tb_livro l
+                where ld.cli_login = c.cli_login and ld.cod_livro = l.cod_livro 
+                and ld.cod_ld = ?;
+                """;
+        return conexaoBanco.queryForObject(sql, (rs, rowNum) -> setListaDesejo(rs), cod_wl);
+    }
+
+    public ListaDesejo setListaDesejo(ResultSet rs) throws SQLException{
+        Cliente cliente = new Cliente();
+        cliente.setLogin(rs.getString("cli_login"));
+        
+        Livro livro = new Livro();
+        livro.setTitulo(rs.getString("liv_titulo"));
+
+        ListaDesejo listaDesejo = new ListaDesejo();
+
+        listaDesejo.setCod_wl(rs.getInt("cod_ld"));
+        listaDesejo.setCliente(cliente);
+        listaDesejo.setLivro(livro);
+        listaDesejo.setData_inclusao(rs.getString("dt_inclusao"));
+        return listaDesejo;
     }
 
     public void novaListaDesejo(ListaDesejo listaDesejo) {
-        listaDesejos.add(listaDesejo);
+        String sql = """
+                insert into tb_listaDesejo (cli_login, cod_livro, dt_inclusao) values (?,?,?)
+                """;
+        conexaoBanco.update(sql,
+                            listaDesejo.getCliente(),
+                            listaDesejo.getLivro(),
+                            listaDesejo.getData_inclusao());
     }
 
     public boolean delete(int cod_wl) {
-        ListaDesejo listaDesejo = new ListaDesejo();
-        listaDesejo.setCod_wl(cod_wl);
-        return listaDesejos.remove(listaDesejo);
+        String sql = """
+                delete from tb_listaDesejo
+                where cod_ld = ?
+                """;
+        return conexaoBanco.update(sql, cod_wl) > 0;
     }
 
     public boolean update(ListaDesejo listaDesejo) {
-        int index = listaDesejos.indexOf(listaDesejo);
-        if (index != -1) {
-            listaDesejos.set(index, listaDesejo);
-            return true;
-        }
-        return false;
+        String sql = """
+                update tb_listaDesejo
+                set cli_login = ?, cod_livro = ?, dt_inclusao = ?
+                where cod_ld = ?
+                """;
+        return conexaoBanco.update(sql,
+                                   listaDesejo.getCliente(),
+                                   listaDesejo.getLivro(),
+                                   listaDesejo.getData_inclusao()) > 0;
     }
 }

@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MilVidasApplication<mil_vidas>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "iftm.suetham.mil_vidas.MilVidasApplication",
+            "projectName": "mil_vidas",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
