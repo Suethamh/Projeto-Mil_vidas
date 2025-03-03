@@ -8,6 +8,7 @@
 </head>
 <body>
     <div class="container">
+        <header th:insert="~{fragments/menu :: menu}"></header>
         <h1 th:text="${livro.cod_livro != 0 ? 'Editar livro' : 'Novo livro'}">Formulário de livro</h1>
 
         <form th:action="@{${livro.cod_livro != 0 ? '/livro/editarlivro/' + livro.cod_livro : '/livro/novolivro'}}" th:object="${livro}" method="post">
@@ -50,6 +51,8 @@
         </form>
 
         <a th:href="@{/livro}" class="btn">Voltar a lista de livros</a>
+
+        <footer th:insert="~{fragments/footer :: footer}"></footer>
     </div>
 </body>
 </html>

@@ -1,57 +1,18 @@
 package iftm.suetham.mil_vidas.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class Cliente {
     private String login;
     private String senha;
     private String nome;
     private String nickname;
-
-    public Cliente() {
-    }
     
-    public Cliente(String login) {
-        this.login = login;
-    }
-
-    public Cliente(String login, String senha, String nome, String nickname) {
-        this.login = login;
-        this.senha = senha;
-        this.nome = nome;
-        this.nickname = nickname;
-    }
-    
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;

@@ -7,7 +7,8 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <div class="container">
+    <div class="container">]
+        <header th:insert="~{fragments/menu :: menu}"></header>
         <h1 th:text="${listaDesejo.cod_wl != 0 ? 'Editar Lista de Desejos' : 'Nova Lista de Desejos'}">Formulário de Lista de Desejos</h1>
 
         <form th:action="@{${listaDesejo.cod_wl != 0 ? '/listaDesejo/editarListaDesejo/' + listaDesejo.cod_wl : '/listaDesejo/novaListaDesejo'}}" th:object="${listaDesejo}" method="post">
@@ -35,6 +36,8 @@
         </form>
 
         <a th:href="@{/listaDesejo}" class="btn">Voltar à Lista de Desejos</a>
+
+        <footer th:insert="~{fragments/footer :: footer}"></footer>
     </div>
 </body>
 </html>

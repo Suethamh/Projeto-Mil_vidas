@@ -6,6 +6,7 @@
 </head>
 <body>
     <div class="container">
+        <header th:insert="~{fragments/menu :: menu}"></header>
         <h1 th:text="${cliente.login != null ? 'Editar Cliente' : 'Novo Cliente'}">Formulário de Cliente</h1>
 
         <form th:action="@{${cliente.login != null ? '/cliente/editarCliente/' + cliente.login : '/cliente/novoCliente'}}" th:object="${cliente}" method="post">
@@ -32,6 +33,8 @@
         </form>
 
         <a th:href="@{/cliente}" class="btn">Voltar a lista de clientes</a>
+
+        <footer th:insert="~{fragments/footer :: footer}"></footer>
     </div>
 </body>
 </html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <nav th:fragment="menu">
+        <ul>
+            <li><a th:href="@{/}">Login</a></li>
+            <li><a th:href="@{/home}">Home</a></li>
+            <li><a th:href="@{/cliente}">Clientes</a></li>
+            <li><a th:href="@{/livro}">Livros</a></li>
+            <li><a th:href="@{/listaDesejo}">Lista de Desejo</a></li>
+        </ul>
+    </nav>
+</body>
+</html>

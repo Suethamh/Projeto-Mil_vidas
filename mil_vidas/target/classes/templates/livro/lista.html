@@ -8,6 +8,7 @@
 </head>
 <body>
     <div class="container">
+        <header th:insert="~{fragments/menu :: menu}"></header>
         <h1>Lista de livros</h1>
 
         <div th:if="${mensagem}" class="mensagem-servidor">
@@ -54,6 +55,8 @@
                 </tr>
             </tbody>
         </table>
+
+        <footer th:insert="~{fragments/footer :: footer}"></footer>
     </div>
 </body>
 </html>
